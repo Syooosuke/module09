@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-from typing import List
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
@@ -29,7 +28,7 @@ class SpaceMission(BaseModel):
     destination: str = Field(min_length=3, max_length=50)
     launch_date: datetime
     duration_days: int = Field(ge=1, le=3650)
-    crew: List[CrewMember] = Field(min_length=1, max_length=12)
+    crew: list[CrewMember] = Field(min_length=1, max_length=12)
     mission_status: str = Field(default="planned")
     budget_millions: float = Field(ge=1.0, le=10000.0)
 
@@ -76,17 +75,25 @@ def main() -> None:
         name="John Smith",
         rank=Rank.CADET,
         age=22,
-        specialization="Engineering",
+        specialization="Navigation",
         years_experience=1,
+    )
+    officer = CrewMember(
+        member_id="C003",
+        name="Alice Johnson",
+        rank=Rank.OFFICER,
+        age=22,
+        specialization="Engineering",
+        years_experience=10,
     )
     try:
         valid_mission = SpaceMission(
             mission_id="M2024_MARS",
             mission_name="Mars Colony Establishment",
             destination="Mars",
-            launch_date=datetime.fromisoformat("2026-08-01T00:00:00"),
-            duration_days=300,
-            crew=[commander, cadet],
+            launch_date="2026-08-01T00:00:00",
+            duration_days=900,
+            crew=[commander, cadet, officer],
             budget_millions=2500.0,
         )
         print("Valid mission created:")
@@ -109,7 +116,7 @@ def main() -> None:
             mission_id="M2024_MOON",
             mission_name="Moon Bae Setup",
             destination="Moon",
-            launch_date=datetime.fromisoformat("2026-09-01T00:00:00"),
+            launch_date="2026-09-01T00:00:00",
             duration_days=30,
             crew=[cadet],
             budget_millions=500.0,
